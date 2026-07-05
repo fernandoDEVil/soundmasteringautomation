@@ -1,0 +1,27 @@
+Streams:
+ffmpeg -i video.mp4
+
+Descragar subtitulos:
+ffmpeg -i video.mp4 -map 0:10 subtitles_eng.srt
+
+Deciveles:
+ffmpeg -i video.mp4 -map 0:a:0 -af volumedetect -f null NUL
+
+Primera pasada LUFS para youtube:
+ffmpeg -i video.mp4 -map 0:a:0 -sn -af loudnorm=I=-14:TP=-1.0:LRA=11:print_format=json -f null NUL
+
+Masterización segunda pasada:
+ffmpeg -i video.mp4 -map 0:v:0 -map 0:a:0 -sn -c:v copy -af loudnorm=I=-14:TP=-1.0:LRA=11:measured_I=-21.59:measured_TP=-2.06:measured_LRA=18.00:measured_thresh=-32.99:offset=1.11:linear=true -c:a aac -b:a 384k video_yt.mkv
+
+Pasar de mkv a mp4 (audio y video deben ser compatibles para mp4):
+ffmpeg -i video.mkv -map 0:v:0 -map 0:a:0 -c copy -sn -movflags +faststart video.mp4
+
+Si se congela al final de la segunda pasada:
+ffmpeg -i video.mp4 -map 0:v:0 -map 0:a:0 -sn -c:v copy -af loudnorm=I=-14:TP=-1.0:LRA=11:measured_I=-21.59:measured_TP=-2.06:measured_LRA=18.00:measured_thresh=-32.99:offset=1.11 -c:a aac -b:a 384k -to 01:46:32.14 -shortest predator_yt.mkv
+
+Si se crashea al incio por memoria:
+ffmep -i video.mp4 -map 0:v:0 -map 0:a:0 -c:v copy -af dynaudnorm=f=150:g=10 -c:a aac -b:a 384k -sn video.mkv
+
+Trabajar con .avi:
+ffmpeg -fflags +genpts -i video.avi -map 0:v:0 -map 0:a:0 -sn -c:v copy -af loudnorm=I=-14:TP=-1.0:LRA=11:measured_I=-21.59:measured_TP=-2.06:measured_LRA=18.00:measured_thresh=-32.99:offset=1.11 -c:a aac -b:a 384k video_yt.mkv
+
