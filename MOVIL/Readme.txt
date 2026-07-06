@@ -17,3 +17,5 @@ readlink -f ~/storage/external-1 (encontrar la ruta actual real)
 
 bash process.sh "/storage/3C3D-A6C7/Android/data/com.termux/files/ffmpeg/fifa.mkv" (Ejecutar automatización)
 
+termux-setup-storage (al formatiar la sd)
+
